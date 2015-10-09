@@ -1,6 +1,11 @@
 #include <hidef.h>      /* common defines and macros */
 #include "derivative.h"      /* derivative-specific definitions */
 
+#include "common.h"
+#include "GPIO_Driver.h"
+#include "System_Driver.h"
+#include "M95160_Driver.h"
+#include "SPI_Driver.h"
 
 
 #include <string.h>
@@ -52,17 +57,42 @@ static void SetupXGATE(void) {
 
 
 
-void main(void) {
-  /* put your own code here */
-  
-SetupXGATE();
-  
+void main(void) 
+{  
+    uint8_t R_S = 0;
+    
+    uint8_t R_Buffer[8];
+    
+    int16_t res = 0xFFu;
+    
+    (void)SystemClock_Init(BusClock_32MHz);
+    
+//    (void)SystemRTI_Init(RTI_Cycle_1ms);
+    
+    SetupXGATE();
+    
+//    Delay1ms(50); 
+    
+    GPIO_Init(GPIOT, GPIO_Pin6, GPIO_Output);
+    GPIO_SetBit(GPIOT, GPIO_Pin6);
+    
+    M95160_Init();
+    
+    M95160_WriteStatusRegister(0x00u);
+    
+    (void)M95160_ReadStatusRegister(&R_S);
+    
+    res = M95160_WriteByteData(0x0020u, 0x27u);
+    
+    res = 0xFFu;
+    
+    res = M95160_ReadSequenceData(0x0020u, R_Buffer, 8);
+    
+    if (R_S == 0x27u)GPIO_ClearBit(GPIOT, GPIO_Pin6);
 
-	EnableInterrupts;
+    EnableInterrupts;
 
-
-  for(;;) {
-    _FEED_COP(); /* feeds the dog */
-  } /* loop forever */
-  /* please make sure that you never leave main */
+    for(;;) 
+    {
+    } /* loop forever */
 }
