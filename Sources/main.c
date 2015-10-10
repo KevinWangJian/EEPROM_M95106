@@ -63,6 +63,8 @@ void main(void)
     
     uint8_t R_Buffer[8];
     
+    uint8_t W_Buffer[8] = {0x23, 0x38, 0x32, 0x19, 0x20, 0x90, 0x55, 0x56};
+    
     int16_t res = 0xFFu;
     
     (void)SystemClock_Init(BusClock_32MHz);
@@ -82,7 +84,9 @@ void main(void)
     
     (void)M95160_ReadStatusRegister(&R_S);
     
-    res = M95160_WriteByteData(0x0020u, 0x27u);
+//    res = M95160_WriteByteData(0x0020u, 0x27u);
+
+    (void)M95160_WriteSequenceData(0x0020u, W_Buffer, 8);
     
     res = 0xFFu;
     

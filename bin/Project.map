@@ -43,7 +43,7 @@ Section Name                    Size  Type     From       To       Segment
 .startData                        41     R     0xC00F     0xC037   ROM_C000
 NON_BANKED                        66     R     0xC038     0xC079   ROM_C000
 .copy                              2     R     0xC07A     0xC07B   ROM_C000
-.text                           2431     R   0xFE8000   0xFE897E   PAGE_FE
+.text                           2493     R   0xFE8000   0xFE89BC   PAGE_FE
 XGATE_VECTORS                    452     R   0xE08800   0xE089C3   PAGE_E0
 XGATE_CODE                        28     R   0xE089C4   0xE089DF   PAGE_E0
 .stack                           256   R/W     0x2000     0x20FF   RAM
@@ -684,7 +684,7 @@ XGATE_STK_H                        2   N/I   0xF810FE   0xF810FF   RAM_XGATE_STK
 .vectSeg629_vect                   2     R     0xFFFE     0xFFFF   .vectSeg629
 
 Summary of section sizes per section type:
-READ_ONLY (R):         BDF (dec:     3039)
+READ_ONLY (R):         C1D (dec:     3101)
 READ_WRITE (R/W):      108 (dec:      264)
 NO_INIT (N/I):         303 (dec:      771)
 
@@ -1332,14 +1332,14 @@ MODULE:                 -- MC9S12XEQ512.c.o --
 MODULE:                 -- main.c.o --
 - PROCEDURES:
      SetupXGATE                              FE8000      35      53       2   .text       
-     main                                    FE8035      72     114       2   .text       
+     main                                    FE8035      96     150       2   .text       
 - VARIABLES:
      shared_counter                            2100       2       2       2   SHARED_DATA 
      XGATE_STACK_L                           F8107E       2       2       1   XGATE_STK_L 
      XGATE_STACK_H                           F810FE       2       2       1   XGATE_STK_H 
 MODULE:                 -- Start12.c.o --
 - PROCEDURES:
-     Init                                    FE80A7      3C      60       2   .text       
+     Init                                    FE80CB      3C      60       2   .text       
      _Startup                                  C000       F      15       0   .init       
 - VARIABLES:
      _startupData                              C00F       6       6       3   .startData  
@@ -1362,30 +1362,30 @@ MODULE:                 -- xgate.cxgate.o --
      XGATE_VectorTable                       E08800     1C4     452       1   XGATE_VECTORS
 MODULE:                 -- GPIO_Driver.c.o --
 - PROCEDURES:
-     GPIO_Init                               FE80E3     196     406      15   .text       
-     GPIO_SetBit                             FE8279      6E     110      12   .text       
-     GPIO_ClearBit                           FE82E7      78     120      14   .text       
+     GPIO_Init                               FE8107     196     406      15   .text       
+     GPIO_SetBit                             FE829D      6E     110      12   .text       
+     GPIO_ClearBit                           FE830B      78     120      14   .text       
 - VARIABLES:
 MODULE:                 -- SPI_Driver.c.o --
 - PROCEDURES:
-     SPI_Init                                FE835F     278     632       6   .text       
-     SPI_WriteByteData                       FE85D7      B1     177      22   .text       
-     SPI_ReadByteData                        FE8688      C0     192       7   .text       
+     SPI_Init                                FE8383     278     632       6   .text       
+     SPI_WriteByteData                       FE85FB      B1     177      20   .text       
+     SPI_ReadByteData                        FE86AC      C0     192       7   .text       
 - VARIABLES:
 MODULE:                 -- System_Driver.c.o --
 - PROCEDURES:
-     SystemClock_Init                        FE8748      52      82       2   .text       
-     TimeDelay_Decrement                     FE879A      1D      29       2   .text       
+     SystemClock_Init                        FE876C      52      82       2   .text       
+     TimeDelay_Decrement                     FE87BE      1D      29       2   .text       
 - VARIABLES:
      g_TimingDelay                             2102       4       4       6   .bss        
 MODULE:                 -- M95160_Driver.c.o --
 - PROCEDURES:
-     M95160_Init                             FE87B7      2F      47       2   .text       
-     M95160_WriteEnable                      FE87E6      21      33       4   .text       
-     M95160_WriteStatusRegister              FE8807      30      48       2   .text       
-     M95160_ReadStatusRegister               FE8837      5A      90       4   .text       
-     M95160_WriteByteData                    FE8891      78     120       2   .text       
-     M95160_ReadSequenceData                 FE8909      76     118       2   .text       
+     M95160_Init                             FE87DB      2F      47       2   .text       
+     M95160_WriteEnable                      FE880A      21      33       4   .text       
+     M95160_WriteStatusRegister              FE882B      30      48       2   .text       
+     M95160_ReadStatusRegister               FE885B      5A      90       4   .text       
+     M95160_WriteSequenceData                FE88B5      8B     139       2   .text       
+     M95160_ReadSequenceData                 FE8940      7D     125       2   .text       
 - VARIABLES:
 MODULE:                 -- MC9S12X_ISR.c.o --
 - PROCEDURES:
@@ -1398,14 +1398,14 @@ MODULE STATISTIC
   Name                                      Data   Code  Const
 ---------------------------------------------------------------------------------------------
   MC9S12XEQ512.c.o                           767      0      0
-  main.c.o                                     6    167      0
+  main.c.o                                     6    203      0
   Start12.c.o                                  0     75      0
   rtshc12.c.o (ansixbi.lib)                    0     54      0
   xgate.cxgate.o                               2     28    452
   GPIO_Driver.c.o                              0    636      0
   SPI_Driver.c.o                               0   1001      0
   System_Driver.c.o                            4    111      0
-  M95160_Driver.c.o                            0    456      0
+  M95160_Driver.c.o                            0    482      0
   MC9S12X_ISR.c.o                              0     12      2
   other                                      256     43      2
 
@@ -1416,7 +1416,7 @@ SECTION: ".text"
   SetupXGATE main Init GPIO_Init GPIO_SetBit GPIO_ClearBit SPI_Init 
   SPI_WriteByteData SPI_ReadByteData SystemClock_Init TimeDelay_Decrement 
   M95160_Init M95160_WriteEnable M95160_WriteStatusRegister 
-  M95160_ReadStatusRegister M95160_WriteByteData M95160_ReadSequenceData 
+  M95160_ReadStatusRegister M95160_WriteSequenceData M95160_ReadSequenceData 
 SECTION: ".bss"
   g_TimingDelay 
 SECTION: ".init"
@@ -3343,22 +3343,22 @@ OBJECT LIST SORTED BY ADDRESS
      XGATE_STACK_H                           F810FE       2       2       1   XGATE_STK_H 
      MyData                                  F81100       2       2       1   XGATE_DATA  
      SetupXGATE                              FE8000      35      53       2   .text       
-     main                                    FE8035      72     114       2   .text       
-     Init                                    FE80A7      3C      60       2   .text       
-     GPIO_Init                               FE80E3     196     406      15   .text       
-     GPIO_SetBit                             FE8279      6E     110      12   .text       
-     GPIO_ClearBit                           FE82E7      78     120      14   .text       
-     SPI_Init                                FE835F     278     632       6   .text       
-     SPI_WriteByteData                       FE85D7      B1     177      22   .text       
-     SPI_ReadByteData                        FE8688      C0     192       7   .text       
-     SystemClock_Init                        FE8748      52      82       2   .text       
-     TimeDelay_Decrement                     FE879A      1D      29       2   .text       
-     M95160_Init                             FE87B7      2F      47       2   .text       
-     M95160_WriteEnable                      FE87E6      21      33       4   .text       
-     M95160_WriteStatusRegister              FE8807      30      48       2   .text       
-     M95160_ReadStatusRegister               FE8837      5A      90       4   .text       
-     M95160_WriteByteData                    FE8891      78     120       2   .text       
-     M95160_ReadSequenceData                 FE8909      76     118       2   .text       
+     main                                    FE8035      96     150       2   .text       
+     Init                                    FE80CB      3C      60       2   .text       
+     GPIO_Init                               FE8107     196     406      15   .text       
+     GPIO_SetBit                             FE829D      6E     110      12   .text       
+     GPIO_ClearBit                           FE830B      78     120      14   .text       
+     SPI_Init                                FE8383     278     632       6   .text       
+     SPI_WriteByteData                       FE85FB      B1     177      20   .text       
+     SPI_ReadByteData                        FE86AC      C0     192       7   .text       
+     SystemClock_Init                        FE876C      52      82       2   .text       
+     TimeDelay_Decrement                     FE87BE      1D      29       2   .text       
+     M95160_Init                             FE87DB      2F      47       2   .text       
+     M95160_WriteEnable                      FE880A      21      33       4   .text       
+     M95160_WriteStatusRegister              FE882B      30      48       2   .text       
+     M95160_ReadStatusRegister               FE885B      5A      90       4   .text       
+     M95160_WriteSequenceData                FE88B5      8B     139       2   .text       
+     M95160_ReadSequenceData                 FE8940      7D     125       2   .text       
 
 *********************************************************************************************
 UNUSED-OBJECTS SECTION
@@ -3376,6 +3376,8 @@ SPI_Driver.c.o:
   SPI_WriteReadByteData 
 System_Driver.c.o:
   SystemWatchDog_Init SystemRTI_Init Delay1ms 
+M95160_Driver.c.o:
+  M95160_WriteByteData 
 NOT USED VARIABLES
 rtshc12.c.o (ansixbi.lib):
   _PowOfTwo_8 _PowOfTwo_16 _PowOfTwo_32 errno 
@@ -3401,8 +3403,8 @@ SetupXGATE                USES XGATE_VectorTable _XGISP31 _INT_CFADDR
                                 _XGSWT 
 main                      USES SystemClock_Init SetupXGATE GPIO_Init 
                                 GPIO_SetBit M95160_Init M95160_WriteStatusRegister 
-                                M95160_ReadStatusRegister M95160_WriteByteData M95160_ReadSequenceData 
-                                GPIO_ClearBit 
+                                M95160_ReadStatusRegister M95160_WriteSequenceData 
+                                M95160_ReadSequenceData GPIO_ClearBit 
 Init                      USES _startupData 
 GPIO_Init                 USES _CASE_CHECKED GPIO_Init _DDRAB _DDRE _RDRH 
                                 _DDRH _PERH _PPSH _RDRJ _DDRJ _PERJ _PPSJ _DDRK 
@@ -3428,7 +3430,7 @@ M95160_WriteStatusRegister USES M95160_WriteEnable GPIO_ClearBit
                                 SPI_WriteByteData GPIO_SetBit 
 M95160_ReadStatusRegister USES GPIO_ClearBit SPI_WriteByteData 
                                 SPI_ReadByteData GPIO_SetBit 
-M95160_WriteByteData      USES M95160_WriteEnable GPIO_ClearBit 
+M95160_WriteSequenceData  USES M95160_WriteEnable GPIO_ClearBit 
                                 SPI_WriteByteData GPIO_SetBit M95160_ReadStatusRegister 
 M95160_ReadSequenceData   USES GPIO_ClearBit SPI_WriteByteData 
                                 SPI_ReadByteData GPIO_SetBit 
@@ -3504,7 +3506,7 @@ DEPENDENCY TREE
  |  |  |     
  |  |  +- GPIO_SetBit          (see above)
  |  |     
- |  +- M95160_WriteByteData
+ |  +- M95160_WriteSequenceData
  |  |  | 
  |  |  +- M95160_WriteEnable   (see above)
  |  |  |  
@@ -3549,5 +3551,5 @@ STATISTIC SECTION
 ExeFile:
 --------
 Number of blocks to be downloaded: 8
-Total size of all blocks to be downloaded: 3039
+Total size of all blocks to be downloaded: 3101
 
