@@ -7,8 +7,11 @@
   *                writting data to M95160 and reading data from M95160.
   * @Others: None
   * @History: 1. Created by Wangjian.
-  * @version: V1.0.0
-  * @date:    09-Nov-2015
+  *           2. a. Removed Enable M95160 chip Write functon;
+  *              b. Changed all API function's name by adding SPI port which 
+  *                 user can specified.
+  * @version: V1.0.1
+  * @date:    11-Nov-2015
 
   ******************************************************************************
   * @attention
@@ -37,12 +40,13 @@
 
 #include "common.h"
 #include "GPIO_Driver.h"
+#include "SPI_Driver.h"
 
  
 /* Exported types ------------------------------------------------------------*/  
 
-/* EEPROM chip M95160 driver version: Rev1.0.0 */
-#define   M95160_DRIVER_VERSION     (100)
+/* EEPROM chip M95160 driver version: Rev1.0.1 */
+#define   M95160_DRIVER_VERSION     (101)
 
 
 #define   M95160_CS_Output()    GPIO_Init(GPIOS, GPIO_Pin7, GPIO_Output)
@@ -79,15 +83,21 @@ extern "C" {
 
 void M95160_Init(void);
 
-int16_t M95160_ReadStatusRegister(uint8_t* R_Value);
 
-void M95160_WriteStatusRegister(uint8_t W_Value);
+void M95160_WriteStatusRegister(SPIx_PortsType SPIx, uint8_t W_Value);
 
-int16_t M95160_WriteByteData(int16_t Memory_Addr, uint8_t W_Data);
 
-int16_t M95160_WriteSequenceData(int16_t Memory_Addr, uint8_t* W_Data, uint8_t W_Length);
+int16_t M95160_ReadStatusRegister(SPIx_PortsType SPIx, uint8_t* R_Value);
 
-int16_t M95160_ReadSequenceData(int16_t Memory_Addr, uint8_t* R_Data, uint16_t R_Length);
+
+int16_t M95160_WriteSingleByteData(SPIx_PortsType SPIx, int16_t Memory_Addr, uint8_t W_Data);
+
+
+int16_t M95160_WriteSequenceBytesData(SPIx_PortsType SPIx, int16_t Memory_Addr, uint8_t* W_Data, uint8_t W_Length);
+
+
+int16_t M95160_ReadSequenceBytesData(SPIx_PortsType SPIx, int16_t Memory_Addr, uint8_t* R_Data, uint16_t R_Length);
+
 
 #ifdef __cplusplus
 }

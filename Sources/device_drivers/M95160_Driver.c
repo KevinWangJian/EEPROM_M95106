@@ -7,8 +7,11 @@
   *                writting data to M95160 and reading data from M95160.
   * @Others: None
   * @History: 1. Created by Wangjian.
-  * @version: V1.0.0
-  * @date:    09-Nov-2015
+  *           2. a. Removed Enable M95160 chip Write functon;
+  *              b. Changed all API function's name by adding SPI port which 
+  *                 user can specified.
+  * @version: V1.0.1
+  * @date:    11-Nov-2015
 
   ******************************************************************************
   * @attention
@@ -68,37 +71,25 @@ void M95160_Init(void)
 
 
 /**
- * @brief   Enable M95160 chip writting function.
- * @attention This function can not be called by users,it can just be called 
- *            by the other API functions in this file.
- * @param   None.
- * @returns None.
- */
-static void M95160_WriteEnable(void) 
-{
-    M95160_CS_LOW();
-    
-    (void)SPI_WriteByteData(SPI0_Port, WREN);
-    
-    M95160_CS_HIGH();   
-}
-
-
-
-/**
  * @brief   Writting status register with specified value.
- * @param   W_Value, user specified value which will be written to M95160 status register.
+ * @param   SPIx, The specified SPI port.
+ *          W_Value, user specified value which will be written to M95160 status register.
  * @returns None.
  */
-void M95160_WriteStatusRegister(uint8_t W_Value) 
-{
-    M95160_WriteEnable();
+void M95160_WriteStatusRegister(SPIx_PortsType SPIx, uint8_t W_Value) 
+{   
+    M95160_CS_LOW();
+    
+    (void)SPI_WriteByteData(SPIx, WREN);
+    
+    M95160_CS_HIGH(); 
+    
     
     M95160_CS_LOW();
     
-    (void)SPI_WriteByteData(SPI0_Port, WRSR);
+    (void)SPI_WriteByteData(SPIx, WRSR);
     
-    (void)SPI_WriteByteData(SPI0_Port, W_Value);
+    (void)SPI_WriteByteData(SPIx, W_Value);
     
     M95160_CS_HIGH();    
 }
@@ -107,21 +98,22 @@ void M95160_WriteStatusRegister(uint8_t W_Value)
 
 /**
  * @brief   Reading status register.
- * @param   *R_Value, Data buffer which store the status register value.
+ * @param   SPIx, The specified SPI port.
+ *          *R_Value, Data buffer which store the status register value.
  * @returns 0, Called successfully.Which means writting process has completely finished.
            -1, Called failed.Which means writting process has not completely finished.It's busy!
  */
-int16_t M95160_ReadStatusRegister(uint8_t* R_Value) 
+int16_t M95160_ReadStatusRegister(SPIx_PortsType SPIx, uint8_t* R_Value) 
 {
     uint16_t Time_Count = 0;
     
     M95160_CS_LOW();
     
-    (void)SPI_WriteByteData(SPI0_Port, RDSR);
+    (void)SPI_WriteByteData(SPIx, RDSR);
     
     do 
     {
-        (void)SPI_ReadByteData(SPI0_Port, 0xFFu, R_Value);
+        (void)SPI_ReadByteData(SPIx, 0xFFu, R_Value);
         
         Time_Count++;
         
@@ -143,12 +135,13 @@ int16_t M95160_ReadStatusRegister(uint8_t* R_Value)
 
 /**
  * @brief   Writting one byte data to M95160 chip with specified memory address.
- * @param   Memory_Addr, User specified memory address.
+ * @param   SPIx, The specified SPI port.
+ *          emory_Addr, User specified memory address.
  *          W_Data, User specified data which will be written to the M95160 chip.
  * @returns 0, Called successfully.Which means writting process has completely finished.
            -1, Called failed.Which means writting process has not completely finished.It's busy!
  */       
-int16_t M95160_WriteByteData(int16_t Memory_Addr, uint8_t W_Data) 
+int16_t M95160_WriteSingleByteData(SPIx_PortsType SPIx, int16_t Memory_Addr, uint8_t W_Data) 
 {
     uint8_t Address[2];
     uint8_t i,ret_val;
@@ -158,24 +151,29 @@ int16_t M95160_WriteByteData(int16_t Memory_Addr, uint8_t W_Data)
     Address[0] = (uint8_t)((Memory_Addr >> 8) & 0x00FFu);
     Address[1] = (uint8_t)(Memory_Addr & 0x00FFu);
     
-    if (M95160_ReadStatusRegister(&ret_val) != 0)return -1;
-    
-    M95160_WriteEnable();
+    if (M95160_ReadStatusRegister(SPIx, &ret_val) != 0)return -1;
     
     M95160_CS_LOW();
     
-    (void)SPI_WriteByteData(SPI0_Port, WRITE);
+    (void)SPI_WriteByteData(SPIx, WREN);
+    
+    M95160_CS_HIGH(); 
+    
+    
+    M95160_CS_LOW();
+    
+    (void)SPI_WriteByteData(SPIx, WRITE);
     
     for (i = 0; i < 2; i++) 
     {
-        (void)SPI_WriteByteData(SPI0_Port, Address[i]);
+        (void)SPI_WriteByteData(SPIx, Address[i]);
     }
     
-    (void)SPI_WriteByteData(SPI0_Port, W_Data);
+    (void)SPI_WriteByteData(SPIx, W_Data);
     
     M95160_CS_HIGH();
     
-    if (M95160_ReadStatusRegister(&ret_val) != 0)return -1;
+    if (M95160_ReadStatusRegister(SPIx, &ret_val) != 0)return -1;
     
     return 0;
 }
@@ -186,13 +184,14 @@ int16_t M95160_WriteByteData(int16_t Memory_Addr, uint8_t W_Data)
  * @brief   Writting sequence bytes data to M95160 chip with specified memory address.
  * @attention  The writen data length can not be more than one page size,and the page size is
  *             32 bytes. 
- * @param   *W_Data, Data buffer which store the written data.
+ * @param   SPIx, The specified SPI port.
+ *          *W_Data, Data buffer which store the written data.
  *          Memory_Addr, User specified memory address.
  *          W_Length, user specified data length.
  * @returns 0, Called successfully.Which means writting process has completely finished.
            -1, Called failed.Which means writting process has not completely finished.It's busy!
  */
-int16_t M95160_WriteSequenceData(int16_t Memory_Addr, uint8_t* W_Data, uint8_t W_Length)
+int16_t M95160_WriteSequenceBytesData(SPIx_PortsType SPIx, int16_t Memory_Addr, uint8_t* W_Data, uint8_t W_Length)
 {
     uint8_t Address[2];
     uint8_t i,ret_val;
@@ -206,25 +205,30 @@ int16_t M95160_WriteSequenceData(int16_t Memory_Addr, uint8_t* W_Data, uint8_t W
     Address[0] = (uint8_t)((Memory_Addr >> 8) & 0x00FFu);
     Address[1] = (uint8_t)(Memory_Addr & 0x00FFu);
     
-    M95160_WriteEnable();
+    M95160_CS_LOW();
+    
+    (void)SPI_WriteByteData(SPIx, WREN);
+    
+    M95160_CS_HIGH();
+    
     
     M95160_CS_LOW();
     
-    (void)SPI_WriteByteData(SPI0_Port, WRITE);
+    (void)SPI_WriteByteData(SPIx, WRITE);
     
     for (i = 0; i < 2; i++) 
     {
-        (void)SPI_WriteByteData(SPI0_Port, Address[i]);
+        (void)SPI_WriteByteData(SPIx, Address[i]);
     }
     
     for (i = 0; i < W_Length; i++) 
     {
-        (void)SPI_WriteByteData(SPI0_Port, *W_Data++);      
+        (void)SPI_WriteByteData(SPIx, *W_Data++);      
     }
         
     M95160_CS_HIGH();
     
-    if (M95160_ReadStatusRegister(&ret_val) != 0)return -1;
+    if (M95160_ReadStatusRegister(SPIx, &ret_val) != 0)return -1;
     
     return 0;    
 }
@@ -233,13 +237,14 @@ int16_t M95160_WriteSequenceData(int16_t Memory_Addr, uint8_t* W_Data, uint8_t W
 
 /**
  * @brief   Reading sequence bytes data from M95160 chip with specified memory address.
- * @param   *R_Data, Data buffer which store the read data.
+ * @param   SPIx, The specified SPI port.
+ *          *R_Data, Data buffer which store the read data.
  *          Memory_Addr, User specified memory address.
  *          R_Length, user specified data length.
  * @returns 0, Called successfully.Which means writting process has completely finished.
            -1, Called failed.Which means writting process has not completely finished.It's busy!
  */
-int16_t M95160_ReadSequenceData(int16_t Memory_Addr, uint8_t* R_Data, uint16_t R_Length) 
+int16_t M95160_ReadSequenceBytesData(SPIx_PortsType SPIx, int16_t Memory_Addr, uint8_t* R_Data, uint16_t R_Length) 
 {
     uint8_t Address[2];
     uint8_t i;
@@ -255,16 +260,16 @@ int16_t M95160_ReadSequenceData(int16_t Memory_Addr, uint8_t* R_Data, uint16_t R
     
     M95160_CS_LOW();
     
-    (void)SPI_WriteByteData(SPI0_Port, READ);
+    (void)SPI_WriteByteData(SPIx, READ);
     
     for (i = 0; i < 2; i++) 
     {
-        (void)SPI_WriteByteData(SPI0_Port, Address[i]);
+        (void)SPI_WriteByteData(SPIx, Address[i]);
     }
     
     for (i = 0; i < R_Length; i++) 
     {
-        (void)SPI_ReadByteData(SPI0_Port, 0xFFu, R_Data);
+        (void)SPI_ReadByteData(SPIx, 0xFFu, R_Data);
         
         R_Data++;      
     }
