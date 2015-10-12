@@ -141,12 +141,12 @@ int16_t M95160_ReadStatusRegister(SPIx_PortsType SPIx, uint8_t* R_Value)
  * @returns 0, Called successfully.Which means writting process has completely finished.
            -1, Called failed.Which means writting process has not completely finished.It's busy!
  */       
-int16_t M95160_WriteSingleByteData(SPIx_PortsType SPIx, int16_t Memory_Addr, uint8_t W_Data) 
+int16_t M95160_WriteSingleByteData(SPIx_PortsType SPIx, uint16_t Memory_Addr, uint8_t W_Data) 
 {
     uint8_t Address[2];
     uint8_t i,ret_val;
     
-    if ((Memory_Addr < MEMORY_STARTADDRESS) || (Memory_Addr > MEMORY_ENDADDRESS))return -1;
+    if (Memory_Addr > MEMORY_ENDADDRESS)return -1;
     
     Address[0] = (uint8_t)((Memory_Addr >> 8) & 0x00FFu);
     Address[1] = (uint8_t)(Memory_Addr & 0x00FFu);
@@ -191,12 +191,12 @@ int16_t M95160_WriteSingleByteData(SPIx_PortsType SPIx, int16_t Memory_Addr, uin
  * @returns 0, Called successfully.Which means writting process has completely finished.
            -1, Called failed.Which means writting process has not completely finished.It's busy!
  */
-int16_t M95160_WriteSequenceBytesData(SPIx_PortsType SPIx, int16_t Memory_Addr, uint8_t* W_Data, uint8_t W_Length)
+int16_t M95160_WriteSequenceBytesData(SPIx_PortsType SPIx, uint16_t Memory_Addr, uint8_t* W_Data, uint8_t W_Length)
 {
     uint8_t Address[2];
     uint8_t i,ret_val;
 
-    if ((Memory_Addr < MEMORY_STARTADDRESS) || (Memory_Addr > MEMORY_ENDADDRESS))return -1;
+    if (Memory_Addr > MEMORY_ENDADDRESS)return -1;
     
     if (W_Data == NULL)return -1;
     
@@ -244,12 +244,12 @@ int16_t M95160_WriteSequenceBytesData(SPIx_PortsType SPIx, int16_t Memory_Addr, 
  * @returns 0, Called successfully.Which means writting process has completely finished.
            -1, Called failed.Which means writting process has not completely finished.It's busy!
  */
-int16_t M95160_ReadSequenceBytesData(SPIx_PortsType SPIx, int16_t Memory_Addr, uint8_t* R_Data, uint16_t R_Length) 
+int16_t M95160_ReadSequenceBytesData(SPIx_PortsType SPIx, uint16_t Memory_Addr, uint8_t* R_Data, uint16_t R_Length) 
 {
     uint8_t Address[2];
     uint8_t i;
     
-    if ((Memory_Addr < MEMORY_STARTADDRESS) || (Memory_Addr > MEMORY_ENDADDRESS))return -1;
+    if (Memory_Addr > MEMORY_ENDADDRESS)return -1;
     
     if (R_Data == NULL)return -1;
     

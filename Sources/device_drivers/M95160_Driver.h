@@ -90,13 +90,13 @@ void M95160_WriteStatusRegister(SPIx_PortsType SPIx, uint8_t W_Value);
 int16_t M95160_ReadStatusRegister(SPIx_PortsType SPIx, uint8_t* R_Value);
 
 
-int16_t M95160_WriteSingleByteData(SPIx_PortsType SPIx, int16_t Memory_Addr, uint8_t W_Data);
+int16_t M95160_WriteSingleByteData(SPIx_PortsType SPIx, uint16_t Memory_Addr, uint8_t W_Data);
 
 
-int16_t M95160_WriteSequenceBytesData(SPIx_PortsType SPIx, int16_t Memory_Addr, uint8_t* W_Data, uint8_t W_Length);
+int16_t M95160_WriteSequenceBytesData(SPIx_PortsType SPIx, uint16_t Memory_Addr, uint8_t* W_Data, uint8_t W_Length);
 
 
-int16_t M95160_ReadSequenceBytesData(SPIx_PortsType SPIx, int16_t Memory_Addr, uint8_t* R_Data, uint16_t R_Length);
+int16_t M95160_ReadSequenceBytesData(SPIx_PortsType SPIx, uint16_t Memory_Addr, uint8_t* R_Data, uint16_t R_Length);
 
 
 #ifdef __cplusplus

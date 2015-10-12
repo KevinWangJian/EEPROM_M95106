@@ -43,7 +43,7 @@ Section Name                    Size  Type     From       To       Segment
 .startData                        41     R     0xC00F     0xC037   ROM_C000
 NON_BANKED                        66     R     0xC038     0xC079   ROM_C000
 .copy                              2     R     0xC07A     0xC07B   ROM_C000
-.text                           2544     R   0xFE8000   0xFE89EF   PAGE_FE
+.text                           2540     R   0xFE8000   0xFE89EB   PAGE_FE
 XGATE_VECTORS                    452     R   0xE08800   0xE089C3   PAGE_E0
 XGATE_CODE                        28     R   0xE089C4   0xE089DF   PAGE_E0
 .stack                           256   R/W     0x2000     0x20FF   RAM
@@ -684,7 +684,7 @@ XGATE_STK_H                        2   N/I   0xF810FE   0xF810FF   RAM_XGATE_STK
 .vectSeg629_vect                   2     R     0xFFFE     0xFFFF   .vectSeg629
 
 Summary of section sizes per section type:
-READ_ONLY (R):         C50 (dec:     3152)
+READ_ONLY (R):         C4C (dec:     3148)
 READ_WRITE (R/W):      108 (dec:      264)
 NO_INIT (N/I):         303 (dec:      771)
 
@@ -1383,8 +1383,8 @@ MODULE:                 -- M95160_Driver.c.o --
      M95160_Init                             FE87EB      2F      47       2   .text       
      M95160_WriteStatusRegister              FE881A      4A      74       2   .text       
      M95160_ReadStatusRegister               FE8864      5B      91       4   .text       
-     M95160_WriteSequenceBytesData           FE88BF      B1     177       2   .text       
-     M95160_ReadSequenceBytesData            FE8970      80     128       2   .text       
+     M95160_WriteSequenceBytesData           FE88BF      AD     173       2   .text       
+     M95160_ReadSequenceBytesData            FE896C      80     128       2   .text       
 - VARIABLES:
 MODULE:                 -- MC9S12X_ISR.c.o --
 - PROCEDURES:
@@ -1404,7 +1404,7 @@ MODULE STATISTIC
   GPIO_Driver.c.o                              0    636      0
   SPI_Driver.c.o                               0   1001      0
   System_Driver.c.o                            4    111      0
-  M95160_Driver.c.o                            0    517      0
+  M95160_Driver.c.o                            0    513      0
   MC9S12X_ISR.c.o                              0     12      2
   other                                      256     43      2
 
@@ -3355,8 +3355,8 @@ OBJECT LIST SORTED BY ADDRESS
      M95160_Init                             FE87EB      2F      47       2   .text       
      M95160_WriteStatusRegister              FE881A      4A      74       2   .text       
      M95160_ReadStatusRegister               FE8864      5B      91       4   .text       
-     M95160_WriteSequenceBytesData           FE88BF      B1     177       2   .text       
-     M95160_ReadSequenceBytesData            FE8970      80     128       2   .text       
+     M95160_WriteSequenceBytesData           FE88BF      AD     173       2   .text       
+     M95160_ReadSequenceBytesData            FE896C      80     128       2   .text       
 
 *********************************************************************************************
 UNUSED-OBJECTS SECTION
@@ -3535,5 +3535,5 @@ STATISTIC SECTION
 ExeFile:
 --------
 Number of blocks to be downloaded: 8
-Total size of all blocks to be downloaded: 3152
+Total size of all blocks to be downloaded: 3148
 
